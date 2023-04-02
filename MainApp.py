@@ -15,6 +15,8 @@ def alert(message):
     x = msg.exec_()
     return x
 
+
+    
 class MainWindow(QMainWindow):
     def __init__(self):
         super(MainWindow, self).__init__()
@@ -33,22 +35,68 @@ class MainWindow(QMainWindow):
             PASSWORD_D = [row[1] for row in LOGIN_DATA]
 
             if LOGIN_D[0] == MainWindow.login and PASSWORD_D[0] == MainWindow.password:
-                self.second_window = SecondWindow()
-                self.second_window.show()
+                self.open_new_window = MainLogged()
+                self.open_new_window.show()
                 self.close()
             else:
                 alert("Wrong password.")
         except:
             alert("No user found.")
 
-class SecondWindow(QMainWindow):
-    def __init__(self):
-        super(SecondWindow, self).__init__()
-        loadUi('Main.ui', self)
-        def welcome():
-            self.loginData.setText(str(MainWindow.login))
-        self.clickButton.clicked.connect(welcome)
 
+class MainLogged(QMainWindow):
+    def __init__(self):
+        super(MainLogged, self).__init__()
+        loadUi('Main.ui', self)
+        self.showMaximized()
+        self.loginData.setText("Welcome to managment application. \nYou are logged in as: "+str(MainWindow.login))
+        self.buttBrowseOrders.clicked.connect(self.BrowseOrders)
+    def BrowseOrders(self):
+        self.open_new_window = BrowseOrders()
+        self.open_new_window.show()
+        self.close()
+
+class BrowseOrders(QMainWindow):
+    def __init__(self):
+        super(BrowseOrders, self).__init__()
+        loadUi('BrowseOrders.ui', self)
+        self.showMaximized()
+        self.ordersTable.setSortingEnabled(False)
+        self.ordersTable.setColumnCount(5)
+        self.ordersTable.setRowCount(0)           
+        self.ordersTable.setColumnWidth(0, 3000)
+        self.ordersTable.setColumnWidth(1, 3000)
+        self.ordersTable.setColumnWidth(2, 3000)
+        self.ordersTable.setColumnWidth(3, 3000)
+        self.ordersTable.setColumnWidth(4, 3000)
+
+        
+
+        def getOrders():
+            cursor.execute("""SELECT ORDER_NAME, CLIENT, TO_CHAR(INPUT_DATE, 'dd-mm-yyyy'), TO_CHAR(REGISTRATION_DATE, 'dd-mm-yyyy'), VALUE
+                            FROM ORDERS""")
+            orders = cursor.fetchall()
+            BrowseOrders.ORDER_NAME = [row[0] for row in orders]
+            BrowseOrders.CLIENT = [row[1] for row in orders]
+            BrowseOrders.INPUT_DATE = [row[2] for row in orders]
+            BrowseOrders.REGISTRATION_DATE = [row[3] for row in orders]
+            BrowseOrders.VALUE = [row[4] for row in orders]
+
+            q = 0
+            for i in range (0,len(BrowseOrders.ORDER_NAME)):
+                self.ordersTable.setRowCount(len(BrowseOrders.ORDER_NAME))
+                self.ordersTable.setItem(q, 0, QTableWidgetItem(str(BrowseOrders.ORDER_NAME[i])))
+                self.ordersTable.setItem(q, 1, QTableWidgetItem(str(BrowseOrders.CLIENT[i])))
+                self.ordersTable.setItem(q, 2, QTableWidgetItem(str(BrowseOrders.INPUT_DATE[i])))
+                self.ordersTable.setItem(q, 3, QTableWidgetItem(str(BrowseOrders.REGISTRATION_DATE[i])))
+                self.ordersTable.setItem(q, 4, QTableWidgetItem(str(BrowseOrders.VALUE[i])))
+                q=q+1
+            self.ordersTable.resizeRowsToContents()
+            self.ordersTable.resizeColumnsToContents()
+            self.ordersTable.setSortingEnabled(True)
+
+
+        self.buttRefresh.clicked.connect(getOrders)
 if __name__ == "__main__":
     import sys
     app = QApplication(sys.argv)
