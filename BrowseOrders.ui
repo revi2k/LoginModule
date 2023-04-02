@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1400</width>
+    <height>800</height>
+   </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>1400</width>
+    <height>800</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>16777215</width>
+    <height>16777215</height>
+   </size>
+  </property>
+  <property name="windowTitle">
+   <string>Orders</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item alignment="Qt::AlignHCenter">
+     <widget class="QSplitter" name="splitter_2">
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+      <widget class="QSplitter" name="splitter">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <widget class="QLabel" name="label">
+        <property name="text">
+         <string>Orders</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="buttRefresh">
+        <property name="maximumSize">
+         <size>
+          <width>200</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Refresh</string>
+        </property>
+       </widget>
+      </widget>
+      <widget class="QTableWidget" name="ordersTable">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>1350</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>1350</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <column>
+        <property name="text">
+         <string>Order</string>
+        </property>
+        <property name="font">
+         <font>
+          <family>Calibri</family>
+          <pointsize>10</pointsize>
+         </font>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>Client</string>
+        </property>
+        <property name="font">
+         <font>
+          <family>Calibri</family>
+          <pointsize>10</pointsize>
+         </font>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>Date</string>
+        </property>
+        <property name="font">
+         <font>
+          <family>Calibri</family>
+          <pointsize>10</pointsize>
+         </font>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>Registration date</string>
+        </property>
+        <property name="font">
+         <font>
+          <family>Calibri</family>
+          <pointsize>10</pointsize>
+         </font>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>Value</string>
+        </property>
+        <property name="font">
+         <font>
+          <family>Calibri</family>
+          <pointsize>10</pointsize>
+         </font>
+        </property>
+       </column>
+      </widget>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
