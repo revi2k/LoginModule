@@ -51,10 +51,49 @@ class MainLogged(QMainWindow):
         self.showMaximized()
         self.loginData.setText("Welcome to managment application. \nYou are logged in as: "+str(MainWindow.login))
         self.buttBrowseOrders.clicked.connect(self.BrowseOrders)
+        self.buttAddClient.clicked.connect(self.AddClient)
     def BrowseOrders(self):
         self.open_new_window = BrowseOrders()
         self.open_new_window.show()
         self.close()
+    def AddClient(self):
+        self.open_new_window = AddClient()
+        self.open_new_window.show()
+        self.close()
+
+class AddClient(QMainWindow):
+    def __init__(self):
+        super(AddClient, self).__init__()
+        loadUi('AddClient.ui', self)
+        self.BackButton.clicked.connect(self.MainLogged)
+        self.ResetButton.clicked.connect(self.ResetData)
+        self.AddClientButton.clicked.connect(self.AddClient)
+    def MainLogged(self):
+        self.open_new_window = MainLogged()
+        self.open_new_window.show()
+        self.close()
+    def ResetData(self):
+        self.CodeLine.setText("")
+        self.FullNameLine.setText("")
+        self.NIPLine.setText("")
+        self.CityLine.setText("")
+        self.EmailLine.setText("")
+        self.BlockedCheckBox.setChecked(False)
+    def AddClient(self):
+        CODE = self.CodeLine.text()
+        FULL_NAME = self.FullNameLine.text()
+        NIP = self.NIPLine.text()
+        CITY = self.CityLine.text()
+        EMAIL = self.EmailLine.text()
+        if self.BlockedCheckBox.isChecked() == True: BLOCKED = 1
+        else: BLOCKED = 0
+
+        if '@' not in EMAIL: print("ZŁY EMAIL") 
+        else: print("OK EMAIL")
+
+        cursor.execute(""" INSERT INTO APPLICATION.CLIENTS (CLIENT_CODE, CLIENT_NAME, NIP, CITY, EMAIL, BLOCKED)
+                        VALUES ('%s','%s','%s','%s','%s',%s)""" % (str(CODE), str(FULL_NAME), str(NIP), str(CITY), str(EMAIL), BLOCKED))
+        connection.commit()
 
 class BrowseOrders(QMainWindow):
     def __init__(self):
