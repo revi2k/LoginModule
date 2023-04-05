@@ -66,15 +66,16 @@ class MainLogged(QMainWindow):
         self.close()
     def AddClient(self):
         try:
-            if MainLogged.CLIENT_ADD == "1":
+            if MainLogged.CLIENT_ADD[0] == 1:
                 self.open_new_window = AddClient()
                 self.open_new_window.show()
                 self.close()
             else:
-                raise Exception("Sorry, you don't have permissions.")
-        except:
-            mess = traceback.format_exc()
+                raise TypeError("Sorry, you don't have permissions.")
+        except Exception as e:
+            mess = ( "Error:\n{}".format( e ) )
             alert(mess)
+            
 class AddClient(QMainWindow):
     def __init__(self):
         super(AddClient, self).__init__()
@@ -103,12 +104,12 @@ class AddClient(QMainWindow):
             if self.BlockedCheckBox.isChecked() == True: BLOCKED = 1
             else: BLOCKED = 0
 
-            if CODE == "": raise Exception("Empty CODE")
-            if FULL_NAME == "": raise Exception("Empty FULL NAME")
-            if NIP == "": raise Exception("Empty NIP")
-            if CITY == "": raise Exception("Empty CITY")
-            if EMAIL == "": raise Exception("Empty EMAIL")
-            if '@' not in EMAIL: raise Exception("Sorry, it's not an e-mail.")
+            if CODE == "": raise TypeError("Empty CODE")
+            if FULL_NAME == "": raise TypeError("Empty FULL NAME")
+            if NIP == "": raise TypeError("Empty NIP")
+            if CITY == "": raise TypeError("Empty CITY")
+            if EMAIL == "": raise TypeError("Empty EMAIL")
+            if '@' not in EMAIL: raise TypeError("Sorry, it's not an e-mail.")
 
 
             cursor.execute(""" INSERT INTO APPLICATION.CLIENTS (CLIENT_CODE, CLIENT_NAME, NIP, CITY, EMAIL, BLOCKED)
@@ -116,8 +117,8 @@ class AddClient(QMainWindow):
             connection.commit()
             alert("Success. Client: "+str(FULL_NAME)+" added.")
             self.ResetData()
-        except Exception:
-            mess = traceback.format_exc()
+        except Exception as e:
+            mess = ( "Error:\n{}".format( e ) )
             alert(mess)
 
 class BrowseOrders(QMainWindow):
