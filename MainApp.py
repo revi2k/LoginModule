@@ -3,6 +3,7 @@ import cx_Oracle
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
+import traceback
 
 connection = cx_Oracle.connect(user='APPLICATION', password='application1',
                                dsn="DESKTOP-GND7002/XEPDB1")
@@ -80,20 +81,30 @@ class AddClient(QMainWindow):
         self.EmailLine.setText("")
         self.BlockedCheckBox.setChecked(False)
     def AddClient(self):
-        CODE = self.CodeLine.text()
-        FULL_NAME = self.FullNameLine.text()
-        NIP = self.NIPLine.text()
-        CITY = self.CityLine.text()
-        EMAIL = self.EmailLine.text()
-        if self.BlockedCheckBox.isChecked() == True: BLOCKED = 1
-        else: BLOCKED = 0
+        try:
+            CODE = self.CodeLine.text()
+            FULL_NAME = self.FullNameLine.text()
+            NIP = self.NIPLine.text()
+            CITY = self.CityLine.text()
+            EMAIL = self.EmailLine.text()
+            if self.BlockedCheckBox.isChecked() == True: BLOCKED = 1
+            else: BLOCKED = 0
 
-        if '@' not in EMAIL: print("ZŁY EMAIL") 
-        else: print("OK EMAIL")
+            if '@' not in EMAIL: raise Exception("Sorry, it's not an e-mail.")
+            else: None
 
-        cursor.execute(""" INSERT INTO APPLICATION.CLIENTS (CLIENT_CODE, CLIENT_NAME, NIP, CITY, EMAIL, BLOCKED)
-                        VALUES ('%s','%s','%s','%s','%s',%s)""" % (str(CODE), str(FULL_NAME), str(NIP), str(CITY), str(EMAIL), BLOCKED))
-        connection.commit()
+            if CODE == "": raise Exception("Empty CODE")
+            if FULL_NAME == "": raise Exception("Empty FULL NAME")
+            if NIP == "": raise Exception("Empty NIP")
+            if CITY == "": raise Exception("Empty CITY")
+            if EMAIL == "": raise Exception("Empty EMAIL")
+
+
+            cursor.execute(""" INSERT INTO APPLICATION.CLIENTS (CLIENT_CODE, CLIENT_NAME, NIP, CITY, EMAIL, BLOCKED)
+                            VALUES ('%s','%s','%s','%s','%s',%s)""" % (str(CODE), str(FULL_NAME), str(NIP), str(CITY), str(EMAIL), BLOCKED))
+            connection.commit()
+        except Exception:
+            traceback.print_exc()
 
 class BrowseOrders(QMainWindow):
     def __init__(self):
