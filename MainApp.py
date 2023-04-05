@@ -51,6 +51,13 @@ class MainLogged(QMainWindow):
         loadUi('Main.ui', self)
         self.showMaximized()
         self.loginData.setText("Welcome to managment application. \nYou are logged in as: "+str(MainWindow.login))
+
+        cursor.execute("""SELECT CLIENT_ADD, ITEM_ADD, ORDER_ADD FROM APPLICATION.USERS WHERE LOGIN = '%s'""" % (str(MainWindow.login)))
+        grants = cursor.fetchall()
+        MainLogged.CLIENT_ADD = [row[0] for row in grants]
+        MainLogged.ITEM_ADD = [row[1] for row in grants]
+        MainLogged.ORDER_ADD = [row[2] for row in grants]
+
         self.buttBrowseOrders.clicked.connect(self.BrowseOrders)
         self.buttAddClient.clicked.connect(self.AddClient)
     def BrowseOrders(self):
@@ -58,10 +65,16 @@ class MainLogged(QMainWindow):
         self.open_new_window.show()
         self.close()
     def AddClient(self):
-        self.open_new_window = AddClient()
-        self.open_new_window.show()
-        self.close()
-
+        try:
+            if MainLogged.CLIENT_ADD == "1":
+                self.open_new_window = AddClient()
+                self.open_new_window.show()
+                self.close()
+            else:
+                raise Exception("Sorry, you don't have permissions.")
+        except:
+            mess = traceback.format_exc()
+            alert(mess)
 class AddClient(QMainWindow):
     def __init__(self):
         super(AddClient, self).__init__()
@@ -101,8 +114,11 @@ class AddClient(QMainWindow):
             cursor.execute(""" INSERT INTO APPLICATION.CLIENTS (CLIENT_CODE, CLIENT_NAME, NIP, CITY, EMAIL, BLOCKED)
                             VALUES ('%s','%s','%s','%s','%s',%s)""" % (str(CODE), str(FULL_NAME), str(NIP), str(CITY), str(EMAIL), BLOCKED))
             connection.commit()
+            alert("Success. Client: "+str(FULL_NAME)+" added.")
+            self.ResetData()
         except Exception:
-            traceback.print_exc()
+            mess = traceback.format_exc()
+            alert(mess)
 
 class BrowseOrders(QMainWindow):
     def __init__(self):
