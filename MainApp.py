@@ -90,14 +90,12 @@ class AddClient(QMainWindow):
             if self.BlockedCheckBox.isChecked() == True: BLOCKED = 1
             else: BLOCKED = 0
 
-            if '@' not in EMAIL: raise Exception("Sorry, it's not an e-mail.")
-            else: None
-
             if CODE == "": raise Exception("Empty CODE")
             if FULL_NAME == "": raise Exception("Empty FULL NAME")
             if NIP == "": raise Exception("Empty NIP")
             if CITY == "": raise Exception("Empty CITY")
             if EMAIL == "": raise Exception("Empty EMAIL")
+            if '@' not in EMAIL: raise Exception("Sorry, it's not an e-mail.")
 
 
             cursor.execute(""" INSERT INTO APPLICATION.CLIENTS (CLIENT_CODE, CLIENT_NAME, NIP, CITY, EMAIL, BLOCKED)
