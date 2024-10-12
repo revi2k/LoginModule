@@ -60,6 +60,7 @@ class MainLogged(QMainWindow):
 
         self.buttBrowseOrders.clicked.connect(self.BrowseOrders)
         self.buttAddClient.clicked.connect(self.AddClient)
+        
     def BrowseOrders(self):
         self.open_new_window = BrowseOrders()
         self.open_new_window.show()
@@ -75,7 +76,7 @@ class MainLogged(QMainWindow):
         except Exception as e:
             mess = ( "Error:\n{}".format( e ) )
             alert(mess)
-            
+
 class AddClient(QMainWindow):
     def __init__(self):
         super(AddClient, self).__init__()
